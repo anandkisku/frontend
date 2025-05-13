@@ -78,7 +78,7 @@ function UpdateUser({ selectedMember, handleCloseModal }) {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg w-full max-w-2xl mx-4">
+    <div className="bg-gray-800/50 p-6 rounded-lg w-full max-w-2xl mx-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-yellow-500">Update Member</h2>
         <button

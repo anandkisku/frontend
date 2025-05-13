@@ -202,7 +202,8 @@ function Dashboard() {
           {/* Quick Actions - Mobile Optimized */}
           <div className="mt-6 grid grid-cols-2 gap-4">
             <button 
-              onClick={() => navigate("/enroll")}
+              onClick={() => {
+                navigate("/enroll")}}
               className="bg-yellow-500 text-gray-900 font-bold py-3 px-4 rounded-lg hover:bg-yellow-600 transition-colors"
             >
               Add Member

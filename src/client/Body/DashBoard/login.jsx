@@ -5,6 +5,7 @@ import { dataRequired, TextInputTwo, validatePassword } from "../allFields";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { notifySuccess } from "../../../utils/notification";
 const API_URL = "http://localhost:8000";
 
 const handleLogin = async (values, navigate, setIsAuthenticated) => {
@@ -13,21 +14,17 @@ const handleLogin = async (values, navigate, setIsAuthenticated) => {
     const response = await axios.post(
       `${API_URL}/login`,
       { username, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
       { withCredentials: true }
     );
-    
+
     if (response.status === 200) {
       setIsAuthenticated(true);
-      toast.success("Login Successful", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
+      notifySuccess("Login successful!");
       navigate("/");
     }
   } catch (error) {
@@ -44,7 +41,12 @@ const handleLogin = async (values, navigate, setIsAuthenticated) => {
   }
 };
 
-const words = ["Register your gym and start managing your members efficiently", "Analyze your gym's growth with real-time insights and reports.", "Securely store and access your gym members' details anytime, anywhere", "Streamline operations and reduce paperwork with our digital solution"];
+const words = [
+  "Register your gym and start managing your members efficiently",
+  "Analyze your gym's growth with real-time insights and reports.",
+  "Securely store and access your gym members' details anytime, anywhere",
+  "Streamline operations and reduce paperwork with our digital solution",
+];
 
 function LoginForm({ setIsAuthenticated }) {
   const navigate = useNavigate();
@@ -79,13 +81,13 @@ function LoginForm({ setIsAuthenticated }) {
   return (
     <div id="mainLogin" className="min-w-full min-h-screen flex bg-gray-900">
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center w-full max-w-2xl"
         >
-          <motion.h1 
+          <motion.h1
             className="text-7xl text-yellow-500 font-bold text-white mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -111,7 +113,9 @@ function LoginForm({ setIsAuthenticated }) {
       {/* Right side with login form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-2xl bg-gray-800 rounded-xl shadow-2xl p-12">
-          <h2 className="text-4xl font-bold text-yellow-500 text-center mb-12">Login</h2>
+          <h2 className="text-4xl font-bold text-yellow-500 text-center mb-12">
+            Login
+          </h2>
           <Formik
             initialValues={{
               username: user.username,
@@ -164,7 +168,11 @@ function LoginForm({ setIsAuthenticated }) {
                     </button>
                   </Link>
                 </div>
-                <ToastContainer />
+                <Link to="/forgot_password">
+                  <p className="text-sm text-end text-yellow-500 cursor-pointer">
+                    Forgot Password ?
+                  </p>
+                </Link>
               </Form>
             )}
           </Formik>

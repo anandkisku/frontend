@@ -16,20 +16,23 @@ import Goal from "./DashBoard/Goal";
 import Settings from "./DashBoard/Settings";
 import Information from "./DashBoard/Information";
 import axios from "axios";
+import Forgotpassword from "./DashBoard/Forgotpassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common["Content-Type"] = "application/json";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const checkInitialAuth = async () => {
-      console.log("2")
+      console.log("2");
       try {
         await axios.get("http://localhost:8000/check-auth", {
-          withCredentials: true
+          withCredentials: true,
         });
         setIsAuthenticated(true);
       } catch (err) {
@@ -37,22 +40,25 @@ function App() {
       }
     };
 
-    console.log("inside")
-    
+    console.log("inside");
+
     checkInitialAuth();
   }, []);
 
-  console.log("isAuthenticated -> ",isAuthenticated)
+  console.log("isAuthenticated -> ", isAuthenticated);
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8000/logout", {}, { withCredentials: true });
+      await axios.post(
+        "http://localhost:8000/logout",
+        {},
+        { withCredentials: true }
+      );
       setIsAuthenticated(false);
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-
   return (
     <ErrorBoundary>
       <Router>
@@ -64,18 +70,29 @@ function App() {
                 <Sidebar onLogout={handleLogout} />
               </div>
             )}
-            
+
             {/* Main Content */}
             <div className="flex-1">
               {isAuthenticated && <Header onLogout={handleLogout} />}
-              <div className="pb-16 md:pb-0"> {/* Add padding bottom for mobile nav */}
+              <div className="pb-16 md:pb-0">
+                {" "}
+                {/* Add padding bottom for mobile nav */}
                 <Routes>
                   <Route path="/register" element={<RegisterOwner />} />
-                  <Route path="/login" element={<LoginForm setIsAuthenticated={setIsAuthenticated} />} />
+                  <Route path="/forgot_password" element={<Forgotpassword />} />
+                  <Route
+                    path="/login"
+                    element={
+                      <LoginForm setIsAuthenticated={setIsAuthenticated} />
+                    }
+                  />
                   <Route
                     path="/"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <Dashboard />
                       </ProtectedRoute>
                     }
@@ -83,7 +100,10 @@ function App() {
                   <Route
                     path="/enroll"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <EnrollMember />
                       </ProtectedRoute>
                     }
@@ -91,7 +111,10 @@ function App() {
                   <Route
                     path="/exercise"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <Exercise />
                       </ProtectedRoute>
                     }
@@ -99,7 +122,10 @@ function App() {
                   <Route
                     path="/goal"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <Goal />
                       </ProtectedRoute>
                     }
@@ -107,7 +133,10 @@ function App() {
                   <Route
                     path="/settings"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <Settings />
                       </ProtectedRoute>
                     }
@@ -115,7 +144,10 @@ function App() {
                   <Route
                     path="/information"
                     element={
-                      <ProtectedRoute isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}>
+                      <ProtectedRoute
+                        isAuthenticated={isAuthenticated}
+                        setIsAuthenticated={setIsAuthenticated}
+                      >
                         <Information />
                       </ProtectedRoute>
                     }
@@ -128,6 +160,18 @@ function App() {
           {/* Mobile Navigation - Only visible on mobile */}
           {isAuthenticated && <MobileNav onLogout={handleLogout} />}
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
       </Router>
     </ErrorBoundary>
   );
